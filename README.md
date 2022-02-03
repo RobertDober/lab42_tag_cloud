@@ -42,7 +42,31 @@ Right now the size of the scale and the gamma value cannot be modified but that 
 
 Well let us describe the behavior of this DSL by means of [speculations](https://github.com/RobertDober/speculate_about).
 
-### Context: Colors
+### Context: The DSL
+
+The DSL is a very simple string with 3 white space separated words, of which the first is a color specification which we
+speculate about below, the second a `font size` in CSS (defaulting to `pt` if only a number is specified) and the third
+the `font weight` as an optional integer with defaults to `100`
+
+This simply is translated to HTML style attributes as follows:
+
+Given the following DSL strings
+```ruby
+    include Lab42::TagCloud
+
+     let(:blue_bold) { "blue 10 800" }
+     let(:dgr_shaded) { "10/darkgoldenrod 1.2em" }
+     let(:explicit) { "6/#2f3ab0 30px 450" }
+```
+
+Then the `to_style` method will yield the following results
+```ruby
+    expect(to_style(blue_bold)).to eq("color: #0000ff; font-size: 10pt; font-weight: 800;")
+    expect(to_style(dgr_shaded)).to eq("color: #995061; font-size: 1.2em;")
+    expect(to_style(explicit)).to eq("color: #695676; font-size: 30px; font-weight: 450;")
+```
+
+#### Context: Colors
 
 Given we include the module:
 ```ruby
@@ -69,6 +93,25 @@ And we can add underscores for readability to the color names
     expect(color_value("4/medium_slate_blue")).to eq("0d16e0")
 ```
 
+#### Context: Convenience Helpers
+
+Now we have already everything we need to create nice tag clouds, e.g. with `ERB`, however
+with the API described so far we would need to write code like the following:
+
+```eruby
+      <% somd_data_source.each do |datum| %>
+         ...
+         <span style="<%= Lab42::TagCloud.to_style(datum.dsl) %>"><%= datum.tag %></span>
+```
+
+However if we had, say a helper, that would operate on objects that respond to `dsl` and `tag`, or `[:dsl]` and `[:tag]`,
+then we could do very nice things like
+
+```eruby
+    <%= some_data_source.map { Lab42::TagCloud.tag_from_objec(_1, tag: "span") } %>
+```
+
+would that not be great?
 
 # LICENSE
 

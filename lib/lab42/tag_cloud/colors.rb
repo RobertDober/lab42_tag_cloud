@@ -18,18 +18,19 @@ module Lab42
           .join
       end
 
-      NAMED_COLOR_RGX = %r{\A (\d\d?) / (\w+) \z}x
-      SIMPLE_SCALE_RGX = /\A \d\d? \z/x
-      HEX_SCALE_RGX = %r<\A (\d\d?) / \# (\h{6}) \z>x
+      HEX_COLOR_RGX = %r<\A (?: (?<scale> \d\d? ) / )? \# (?<hex> \h{6} ) \z>x
+      NAMED_COLOR_RGX = %r{\A (?: (?<scale> \d\d? ) / )? (?<color_name> \w+ ) \z}x
+      SCALE_RGX = /\A \d\d? \z/x
 
       def parse_color(color)
         case
-        when match = SIMPLE_SCALE_RGX.match(color)
-          _simple_scale(match)
+        when match = SCALE_RGX.match(color)
+          _gray_scale(match)
+        when match = HEX_COLOR_RGX.match(color)
+          _hex_color(match)
+          [match[1].to_i, match[2]]
         when match = NAMED_COLOR_RGX.match(color)
           _named_scale(match)
-        when match = HEX_SCALE_RGX.match(color)
-          [match[1].to_i, match[2]]
         else
           raise ArgumentError, "illegal color spec #{color}"
         end
@@ -46,12 +47,16 @@ module Lab42
         end
       end
 
-      def _simple_scale(match)
+      def _gray_scale(match)
         [match.to_s.to_i, "000000"]
       end
 
+      def _hex_color(match)
+        [(match[:scale] || 12).to_i, match[:hex]]
+      end
+
       def _named_scale(match)
-        [match[1].to_i, Names.get_color(match[2])]
+        [(match[:scale] || 12).to_i, Names.get_color(match[:color_name])]
       end
     end
   end
