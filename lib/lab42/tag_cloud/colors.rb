@@ -3,12 +3,23 @@
 require_relative "colors/names"
 module Lab42
   module TagCloud
-    module Colors extend self
-      def gamma_correct(color)
+    module Colors
+      extend self
+
+      COLOR_RGX = /\A (..) (..) (..) \z/x
+      SCALES = 12
+      GAMMA = 2.2
+
+      def gamma_correct((scale, color))
+        COLOR_RGX
+          .match(color)
+          .captures
+          .map(&_gamma_corrected_octet(scale))
+          .join
       end
 
-      NAMED_COLOR_RGX = %r<\A (\d\d?) / (\w+) \z>x
-      SIMPLE_SCALE_RGX = %r<\A \d\d? \z>x
+      NAMED_COLOR_RGX = %r{\A (\d\d?) / (\w+) \z}x
+      SIMPLE_SCALE_RGX = /\A \d\d? \z/x
       HEX_SCALE_RGX = %r<\A (\d\d?) / \# (\h{6}) \z>x
 
       def parse_color(color)
@@ -22,6 +33,25 @@ module Lab42
         else
           raise ArgumentError, "illegal color spec #{color}"
         end
+      end
+
+      private
+
+      def _gamma_corrected_octet(scale)
+        ->(octet) do
+          inv_c = octet.to_i(16)
+          scaled = (255 - inv_c) * (((SCALES - scale).to_f/SCALES) ** (1.0/GAMMA))
+          value = (inv_c - scaled.round).abs.round
+          "%02x" % value
+        end
+      end
+
+      def _simple_scale(match)
+        [match.to_s.to_i, "000000"]
+      end
+
+      def _named_scale(match)
+        [match[1].to_i, Names.get_color(match[2])]
       end
     end
   end

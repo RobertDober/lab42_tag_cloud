@@ -1,13 +1,15 @@
 # frozen_string_literal: true
+
 module Lab42
   module TagCloud
     module Colors
       # rubocop:disable Metrics/ModuleLength
-      module Names extend self
+      module Names
+        extend self
         # rubocop:disable Metrics/MethodLength
         def webcolors
           @__webcolors__ ||= {
-            "aliceblue"  =>  "f0f8ff",
+            "aliceblue" => "f0f8ff",
             "antiquewhite" => "faebd7",
             "aqua" => "00ffff",
             "aquamarine" => "7fffd4",
@@ -152,9 +154,8 @@ module Lab42
         # rubocop:enable Metrics/MethodLength
 
         def get_color(name)
-          webcolors.fetch(name.to_s.gsub(%r{[-_]}, ""))
+          webcolors.fetch(name.to_s.gsub(/[-_]/, ""))
         end
-
       end
       # rubocop:enable Metrics/ModuleLength
     end

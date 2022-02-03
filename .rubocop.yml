@@ -21,6 +21,12 @@ Layout/EmptyLinesAroundAccessModifier:
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: false
 
+Style/FormatString:
+  Enabled: false
+
+Layout/SpaceAroundOperators:
+  Enabled: false
+
 Layout/SpaceBeforeBlockBraces:
   Enabled: false
 
