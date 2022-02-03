@@ -1,5 +1,5 @@
 [![Issue Count](https://codeclimate.com/github/RobertDober/lab42_tag_cloud/badges/issue_count.svg)](https://codeclimate.com/github/RobertDober/lab42_tag_cloud)
-[![Gem Version](http://img.shields.io/gem/v/lab42_lab42_tag_cloud.svg)](https://rubygems.org/gems/lab42_lab42_tag_cloud)
+[![Gem Version](http://img.shields.io/gem/v/lab42_tag_cloud.svg)](https://rubygems.org/gems/lab42_tag_cloud)
 [![CI](https://github.com/robertdober/lab42_tag_cloud/workflows/CI/badge.svg)](https://github.com/robertdober/lab42_tag_cloud/actions)
 [![Coverage Status](https://coveralls.io/repos/github/RobertDober/lab42_tag_cloud/badge.svg?branch=main)](https://coveralls.io/github/RobertDober/lab42_tag_cloud?branch=main)
 
