@@ -4,8 +4,9 @@ require_relative "colors"
 module Lab42
   module TagCloud
     module Compiler extend self
-      def color_value(*)
-        "525252"
+      def color_value(color_spec)
+        parsed = Colors.parse_color(color_spec)
+        Color.gamma_correct(parsed)
       end
     end
   end

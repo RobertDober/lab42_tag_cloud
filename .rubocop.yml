@@ -56,8 +56,15 @@ Style/Documentation:
 Style/DoubleNegation:
   Enabled: false
 
+Style/EmptyCaseCondition:
+  Enabled: false
+
 Style/EmptyMethod:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Include:
+    - "lib/**/*.rb"
 
 Style/Lambda:
   Enabled: false
@@ -65,12 +72,14 @@ Style/Lambda:
 Style/LambdaCall:
   Enabled: false
 
-Style/FrozenStringLiteralComment:
-  Include:
-    - "lib/**/*.rb"
+Style/ModuleFunction:
+  Enabled: false
 
 Style/StringLiterals:
   Enabled: false
 
 Style/TrailingBodyOnModule:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
   Enabled: false
