@@ -8,8 +8,12 @@ module Lab42
       Compiler.color_value(color_spec.to_s)
     end
 
+    def tag_from_object(object, **atts)
+      Compiler.tag_from_object(object, **atts)
+    end
+
     def to_style(dsl_string)
-      Compiler.make_attributes(*dsl_string.split)
+      Compiler.make_css_attributes(*dsl_string.split)
     end
   end
 end

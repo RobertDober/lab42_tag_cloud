@@ -39,6 +39,14 @@ RSpec.describe "README.md" do
     end
     # README.md:96
     context "Convenience Helpers" do
+      # README.md:119
+      let(:ostruct) { OpenStruct.new(tag: "Ruby", dsl: "10/red 1.2em") }
+      let(:hash) { {tag: "Elixir", dsl: "blue 1.5em 800"} }
+      it "we can obtain tags from these objects (README.md:125)" do
+        expect(tag_from_object(ostruct)).to eq(%{<span style="color: #ff7171; font-size: 1.2em;">Ruby</span>})
+        expect(tag_from_object(hash, tag: :div, class: "some-class"))
+        .to eq(%{<div class="some-class" style="color: #0000ff; font-size: 1.5em; font-weight: 800;">Elixir</div>})
+      end
     end
   end
 end

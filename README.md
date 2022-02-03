@@ -108,10 +108,27 @@ However if we had, say a helper, that would operate on objects that respond to `
 then we could do very nice things like
 
 ```eruby
-    <%= some_data_source.map { Lab42::TagCloud.tag_from_objec(_1, tag: "span") } %>
+    <%= some_data_source.map { Lab42::TagCloud.tag_from_object(_1, tag: "span") } %>
 ```
 
 would that not be great?
+
+Well guess what it _is_ _great_, and the helper is called `tag_from_object` indeed
+
+Given an `OpenStruct` and a `Hash` instance of the required format
+```ruby
+    let(:ostruct) { OpenStruct.new(tag: "Ruby", dsl: "10/red 1.2em") }
+    let(:hash) { {tag: "Elixir", dsl: "blue 1.5em 800"} }
+```
+
+Then we can obtain tags from these objects
+```ruby
+    expect(tag_from_object(ostruct)).to eq(%{<span style="color: #ff7171; font-size: 1.2em;">Ruby</span>})
+    expect(tag_from_object(hash, tag: :div, class: "some-class"))
+      .to eq(%{<div class="some-class" style="color: #0000ff; font-size: 1.5em; font-weight: 800;">Elixir</div>})
+```
+
+Typically such tag clouds can than be easily constructed from external data sources like JSON or YAML
 
 # LICENSE
 
