@@ -42,8 +42,32 @@ Right now the size of the scale and the gamma value cannot be modified but that 
 
 Well let us describe the behavior of this DSL by means of [speculations](https://github.com/RobertDober/speculate_about).
 
-### Context
+### Context: Colors
 
+Given we include the module:
+```ruby
+    include Lab42::TagCloud
+```
+
+Then we can see some transformation for colors, e.g. shade 11 of black can be expressed in different ways
+```ruby
+    gray = "525252"
+    expect(color_value(11)).to eq(gray)
+    expect(color_value("11")).to eq(gray)
+    expect(color_value("11/black")).to eq(gray)
+    expect(color_value("11/#000000")).to eq(gray)
+```
+
+And we can also use all web color names
+```ruby
+    expect(color_value("10/blue")).to eq("7171ff")
+    expect(color_value("10/lime")).to eq("71ff71")
+```
+
+And we can add underscores for readability to the color names
+```ruby
+    expect(color_value("4/medium_slate_blue")).to eq("0d16e0")
+```
 
 
 # LICENSE
