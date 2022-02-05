@@ -42,10 +42,27 @@ RSpec.describe "README.md" do
       # README.md:119
       let(:ostruct) { OpenStruct.new(tag: "Ruby", dsl: "10/red 1.2em") }
       let(:hash) { {tag: "Elixir", dsl: "blue 1.5em 800"} }
-      it "we can obtain tags from these objects (README.md:125)" do
-        expect(tag_from_object(ostruct)).to eq(%{<span style="color: #ff7171; font-size: 1.2em;">Ruby</span>})
+      let(:elixir_style) { %{ style="color: #0000ff; font-size: 1.5em; font-weight: 800;"} }
+      let(:ruby_style) { %{ style="color: #ff7171; font-size: 1.2em;"} }
+      let(:two) { [ostruct, hash] }
+      it "we can obtain tags from these objects (README.md:128)" do
+        expect(tag_from_object(ostruct)).to eq(%{<span#{ruby_style}>Ruby</span>})
         expect(tag_from_object(hash, tag: :div, class: "some-class"))
-        .to eq(%{<div class="some-class" style="color: #0000ff; font-size: 1.5em; font-weight: 800;">Elixir</div>})
+        .to eq(%{<div class="some-class"#{elixir_style}>Elixir</div>})
+      end
+      it "we can map them together (README.md:135)" do
+        expected =
+        %{<span#{ruby_style}>Ruby</span>&nbsp;<span#{elixir_style}>Elixir</span>}
+        
+        expect(two.map {tag_from_object(_1)}.join("&nbsp;"))
+        .to eq(expected)
+      end
+      it "with this we can do things like: (README.md:146)" do
+        expected =
+        %{<li#{ruby_style}><i>Ruby</i></li>&nbsp;-&nbsp;<li#{elixir_style}><i>Elixir</i></li>}
+        
+        expect(tags_from_collection(two, tag: :li, before: "<i>", after: "</i>", join: "&nbsp;-&nbsp;"))
+        .to eq(expected)
       end
     end
   end

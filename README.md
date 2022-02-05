@@ -1,8 +1,8 @@
 [![Issue Count](https://codeclimate.com/github/RobertDober/lab42_tag_cloud/badges/issue_count.svg)](https://codeclimate.com/github/RobertDober/lab42_tag_cloud)
-[![Gem Version](http://img.shields.io/gem/v/lab42_tag_cloud.svg)](https://rubygems.org/gems/lab42_tag_cloud)
 [![CI](https://github.com/robertdober/lab42_tag_cloud/workflows/CI/badge.svg)](https://github.com/robertdober/lab42_tag_cloud/actions)
 [![Coverage Status](https://coveralls.io/repos/github/RobertDober/lab42_tag_cloud/badge.svg?branch=main)](https://coveralls.io/github/RobertDober/lab42_tag_cloud?branch=main)
-
+[![Gem Version](http://img.shields.io/gem/v/lab42_tag_cloud.svg)](https://rubygems.org/gems/lab42_tag_cloud)
+[![Gem Downloads](https://img.shields.io/gem/dt/lab42_tag_cloud.svg)](https://rubygems.org/gems/lab42_tag_cloud)
 
 # Lab42::TagCloud
 
@@ -113,19 +113,42 @@ then we could do very nice things like
 
 would that not be great?
 
-Well guess what it _is_ _great_, and the helper is called `tag_from_object` indeed
+Well guess what, it _is_ _great_, and the helper is called `tag_from_object` indeed
 
 Given an `OpenStruct` and a `Hash` instance of the required format
 ```ruby
     let(:ostruct) { OpenStruct.new(tag: "Ruby", dsl: "10/red 1.2em") }
     let(:hash) { {tag: "Elixir", dsl: "blue 1.5em 800"} }
+    let(:elixir_style) { %{ style="color: #0000ff; font-size: 1.5em; font-weight: 800;"} }
+    let(:ruby_style) { %{ style="color: #ff7171; font-size: 1.2em;"} }
+    let(:two) { [ostruct, hash] }
 ```
 
 Then we can obtain tags from these objects
 ```ruby
-    expect(tag_from_object(ostruct)).to eq(%{<span style="color: #ff7171; font-size: 1.2em;">Ruby</span>})
+    expect(tag_from_object(ostruct)).to eq(%{<span#{ruby_style}>Ruby</span>})
     expect(tag_from_object(hash, tag: :div, class: "some-class"))
-      .to eq(%{<div class="some-class" style="color: #0000ff; font-size: 1.5em; font-weight: 800;">Elixir</div>})
+      .to eq(%{<div class="some-class"#{elixir_style}>Elixir</div>})
+```
+
+And we can map them together
+```ruby
+    expected =
+      %{<span#{ruby_style}>Ruby</span>&nbsp;<span#{elixir_style}>Elixir</span>}
+
+    expect(two.map {tag_from_object(_1)}.join("&nbsp;"))
+      .to eq(expected)
+```
+
+But that is cumbersome and we want a more flexible approach: Enter `tags_from_collction`
+
+Then with this we can do things like:
+```ruby
+    expected =
+    %{<li#{ruby_style}><i>Ruby</i></li>&nbsp;-&nbsp;<li#{elixir_style}><i>Elixir</i></li>}
+
+    expect(tags_from_collection(two, tag: :li, before: "<i>", after: "</i>", join: "&nbsp;-&nbsp;"))
+      .to eq(expected)
 ```
 
 Typically such tag clouds can than be easily constructed from external data sources like JSON or YAML
