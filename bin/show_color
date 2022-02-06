@@ -1,0 +1,7 @@
+#!/usr/bin/env bundle exec ruby
+
+require "lab42/tag_cloud/cli"
+
+puts Lab42::TagCloud::Cli.show_color(ARGV) if $0 == __FILE__
+
+# SPDX-License-Identifier: Apache-2.0

@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = description
   s.authors     = ["Robert Dober"]
   s.email       = 'robert.dober@gmail.com'
-  s.files       = Dir.glob("lib/**/*.rb")
+  s.files       = Dir.glob(%w[lib/**/*.rb bin/**/*])
   s.files      += %w[LICENSE README.md]
   s.homepage    = "https://github.com/robertdober/lab42_tag_cloud"
   s.licenses    = %w[Apache-2.0]
